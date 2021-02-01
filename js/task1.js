@@ -4,7 +4,7 @@ import galleryItems from "./gallery-items.js"
 //1- Создание и рендер разметки по массиву данных
 // и предоставленному шаблону.
 const jsGalleryRef = document.querySelector('.js-gallery');
-let a = 0;
+//let a = 0;
 
 const liMarkup = (el => {
     const galleryItemRef = document.createElement('li');
@@ -61,6 +61,8 @@ function onTagsClick(event) {
      //Открытие модального окна по клику на элементе галереи.
     if (nextActiveImage) {
         lightboxRef.classList.add('is-open'); 
+        //Закрытие модального окна по клику на div.lightbox__overlay
+        lightboxOverlayRef.addEventListener('click', closeModal);
         // jsGalleryRef.addEventListener('keydown', event => {
             
         //     if(event.code === 'ArrowRight') {
@@ -86,13 +88,13 @@ function onTagsClick(event) {
         lightboxCloseRef.addEventListener('click', closeModal);
     }
     if (!lightboxOverlayRef) return; 
-    else  {
-        //Закрытие модального окна по клику на div.lightbox__overlay
-     lightboxOverlayRef.addEventListener('click', closeModal);
-    };
+  
 };   
 function closeModal() {
     lightboxRef.classList.remove('is-open');
+    lightboxCloseRef.removeEventListener('click', closeModal);
+    lightboxOverlayRef.removeEventListener('click', closeModal);
+    window.removeEventListener('keydown', event);
     //Очистка значения атрибута src элемента img.lightbox__image. 
     //Это необходимо для того, чтобы при следующем открытии модального окна,
     // пока грузится изображение, мы не видели предыдущее.
@@ -111,7 +113,6 @@ window.addEventListener('keydown', event => {
     //Закрытие модального окна по нажатию клавиши ESC
     if(event.code === 'Escape') {
         closeModal();
-        window.removeEventListener('keydown', event);
     }
 });
   
